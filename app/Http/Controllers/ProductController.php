@@ -4,12 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Http\Controllers\CartController;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return view('catalog', compact('products'));
+        if ($request->get("addedid") && $request->get("count")) {
+            CartController::addProduct(
+                $request->get("addedid"),$request->get("count")
+            );
+        }
+
+        $vars = array();
+        $vars["products"] = Product::all();
+        $vars["cart_count"] = Product::count();
+        $vars["get"]["addedid"] = $request->get("addedid");
+        $vars["get"]["count"] = $request->get("count");
+        return view('catalog', compact('vars'));
     }
 }

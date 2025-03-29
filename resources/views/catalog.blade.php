@@ -18,8 +18,23 @@
         }
     </style>
 </head>
+<header>
+    <a href="/cart">Корзина({{$vars["cart_count"]}})</a>
+</header>
 <body>
 Here's gonna be the catalogue
-<pre><?php print_r($products);?></pre>
+
+<ul>
+    @foreach ($vars["products"] as $elem)
+            <li class="catalog-item" id="{{$elem->id}}">{{ $elem->name }} {{ $elem->price }} Р.</li>
+            <form action="/" method="get">
+                <input type="hidden" name="addedid" value="{{$elem->id}}">
+                <button onclick="this.form.count.value--;return false;">-</button>
+                <input type="text" name="count" value="1">
+                <button onclick="this.form.count.value++;return false;">+</button>
+                <input type="submit" value="В корзину">
+            </form>
+    @endforeach
+</ul>
 </body>
 </html>
