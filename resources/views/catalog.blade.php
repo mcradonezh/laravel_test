@@ -20,6 +20,13 @@
 </head>
 <header>
     <a href="/cart">Корзина({{$vars["cart_count"]}})</a>
+    @auth
+        <a href="/orders">Заказы</a>
+        <a href="/logout">Выйти</a>
+    @else
+        <a href="/login">Войти</a>
+        <a href="/reg">Зарегистрироваться</a>
+    @endauth
 </header>
 <body>
 Here's gonna be the catalogue

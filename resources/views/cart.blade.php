@@ -8,11 +8,15 @@
     <title>Document</title>
 </head>
 <body>
-<pre>
-    <?php
-        print_r($cart);
-    ?>
-</pre>
+<header>
+    @auth
+        <a href="/orders">Заказы</a>
+        <a href="/logout">Выйти</a>
+    @else
+        <a href="/login">Войти</a>
+    @endauth
+</header>
+<a href="/">К каталогу</a>
 <table>
     @foreach ($cart as $elem)
         <tr>

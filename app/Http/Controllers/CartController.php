@@ -28,7 +28,7 @@ class CartController extends Controller
         ]);
     }
 
-    public function count(): int
+    public static function count(): int
     {
         $count = Cart::all()->count();
         return $count;

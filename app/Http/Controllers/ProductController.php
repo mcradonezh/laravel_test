@@ -18,7 +18,7 @@ class ProductController extends Controller
 
         $vars = array();
         $vars["products"] = Product::all();
-        $vars["cart_count"] = Product::count();
+        $vars["cart_count"] = CartController::count();
         $vars["get"]["addedid"] = $request->get("addedid");
         $vars["get"]["count"] = $request->get("count");
         return view('catalog', compact('vars'));

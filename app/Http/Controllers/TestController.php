@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Http\Controllers\CartController;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class TestController extends Controller
 {
@@ -25,6 +27,9 @@ class TestController extends Controller
             $data_elem["token"] = $elem->session_token;
             $data[] = $data_elem;
         }
+        $userId = Auth::id();
+        $data["user_id"] = $userId;
+        $data["check"] = Auth::check();
         return view('test', compact('data'));
     }
 }
