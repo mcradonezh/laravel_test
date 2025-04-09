@@ -26,5 +26,6 @@
         </tr>
     @endforeach
 </table>
+<a href="{{route('makeorder')}}">Сформировать заказ</a>
 </body>
 </html>

@@ -34,7 +34,8 @@ Here's gonna be the catalogue
 <ul>
     @foreach ($vars["products"] as $elem)
             <li class="catalog-item" id="{{$elem->id}}">{{ $elem->name }} {{ $elem->price }} Р.</li>
-            <form action="/" method="get">
+            <form action="{{route('addtocart')}}" method="post">
+                @csrf
                 <input type="hidden" name="addedid" value="{{$elem->id}}">
                 <button onclick="this.form.count.value--;return false;">-</button>
                 <input type="text" name="count" value="1">

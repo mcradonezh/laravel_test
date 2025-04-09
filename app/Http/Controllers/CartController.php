@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\User;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -19,18 +20,29 @@ class CartController extends Controller
         return view('cart', compact('cart'));
     }
 
-    public static function addProduct(int $productId, int $count)
+    public function addToCart(Request $request)
     {
-        $cart = Cart::create([
-            "count" => $count,
-            "product_id" => $productId,
-            "session_token" => session()->get("_token")
-        ]);
+        $product = Cart::where(["product_id" => $request->post("addedid"),"session_token" => session()->get("_token")])->first();
+        if ($product) {
+            $product->count+=$request->post("count");
+            $product->save();
+        }
+        else {
+            $userId = Auth::check() ? Auth::id() : null;
+            Cart::create([
+                "count" => $request->post("count"),
+                "product_id" => $request->post("addedid"),
+                "session_token" => session()->get("_token"),
+                "user_id" => $userId
+            ]);
+        }
+        return redirect('/');
+
     }
 
     public static function count(): int
     {
-        $count = Cart::all()->count();
+        $count = Cart::where(["session_token" => session()->get("_token")])->count();
         return $count;
     }
 
@@ -38,7 +50,12 @@ class CartController extends Controller
     {
         $sessionToken = session()->get("_token");
         $res = array();
-        $cart = Cart::where(["session_token" => $sessionToken])->get();
+        if (Auth::check()) {
+            $cart = Cart::where(["session_token" => $sessionToken])->get();
+        }
+        else {
+            $cart = Cart::where(["user_id" => Auth::id()])->get();
+        }
         foreach ($cart as $rec) {
             $item = array();
             $item["name"] = Product::where(["id" => $rec->product_id])->first()->name;

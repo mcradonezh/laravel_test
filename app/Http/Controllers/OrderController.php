@@ -18,9 +18,19 @@ class OrderController extends Controller
         return view('test', compact('data'));
     }
 
-    public function makeOrder(): bool {
+    public function makeOrder() {
         $token = session()->get("_token");
         $orderList = array();
-        $products = Cart::where(["session_token" => $token])->get();
+        $products = Cart::select(["product_id","count"])->where(["session_token" => $token])->get();
+        foreach ($products as $product) {
+            $item["product_id"] = $product->product_id;
+            $item["count"] = $product->count;
+            $orderList[] = $item;
+        }
+        Order::create([
+            "product_list" => json_encode($orderList),
+            "user_id" => Auth::id()
+        ]);
+        return view('/orders', compact('data'));
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Cart;
 
 class AuthController extends Controller
 {
@@ -35,6 +36,12 @@ class AuthController extends Controller
         $email = $request->post("email");
         User::create(["name" =>$login, "password" => $password, "email" => $email]);
         Auth::attempt(["name" => $login, "password" => $password]);
+        $this->cartToUser();
+
         return redirect("/");
+    }
+
+    private function cartToUser() {
+        $cart = Cart::where(["session_token" => session()->get("_token")])->update(["user_id" => Auth::id()]);
     }
 }

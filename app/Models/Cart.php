@@ -11,4 +11,5 @@ class Cart extends Model
         'session_token',
         'count',
     ];
+
 }
